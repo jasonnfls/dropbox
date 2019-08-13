@@ -71,6 +71,11 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     if fi.IsDir() {
+        if fi.Name() == base_path {
+            w.WriteHeader(401)
+            w.Write([]byte("root path is protected"))
+            return
+        }
         if err := os.RemoveAll(fullpath); err != nil {
             w.WriteHeader(500)
             w.Write([]byte(err.Error()))
